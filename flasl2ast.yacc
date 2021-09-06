@@ -4,39 +4,38 @@
 
 %term
   ATOM of string | NOT | AND | OR | IF | THEN | ELSE | IFF | THEREFORE | TERM | RPAREN | LPAREN | EOF  
-
-%nonterm ARGUMENT | HYP | PROP 
+%nonterm FILE of ARG.argument | ARGUMENT of ARG.argument | HYP of ARG.hypothesis | PROP of ARG.prop 
 
 %pos int
-
 %eop EOF
 %noshift EOF
+%start FILE
 
-%start ARGUMENT
 
-(* Defining associativity rules *)
 %right IFF
+%nonassoc ELSE
+%right THEN
 %left AND OR IF
 %right NOT
-%nonassoc LPAREN
 
 %verbose
 
 %%
 
-(* Production Rules along with printing them *)
+FILE: ARGUMENT(ARGUMENT)
 
-ARGUMENT: HYP THEREFORE PROP TERM()   
+ARGUMENT: HYP THEREFORE PROP TERM(ARG.Hence(HYP,PROP))   
 
-HYP: PROP TERM()
-     | HYP PROP TERM()
+HYP: PROP TERM(ARG.addHyp(PROP,ARG.PropList([])))
+     | PROP TERM HYP(ARG.addHyp(PROP,HYP))
+     | (ARG.PropList([]))
 
-PROP: ATOM()
-     | NOT PROP()
-     | PROP AND PROP()
-     | PROP OR PROP()
-     | LPAREN IF PROP THEN PROP RPAREN()
-     | LPAREN IF PROP THEN PROP ELSE PROP RPAREN()
-     | PROP IF PROP()
-     | PROP IFF PROP()
-     | LPAREN PROP RPAREN()		 			
+PROP: ATOM(ARG.Atom(ATOM))
+     | NOT PROP(ARG.Negation(PROP))
+     | PROP AND PROP(ARG.Conjunction(PROP1,PROP2))
+     | PROP OR PROP(ARG.Disjunction(PROP1,PROP2))
+     | IF PROP THEN PROP(ARG.Conditional(PROP1,PROP2))
+     | IF PROP THEN PROP ELSE PROP(ARG.ITE(PROP1,PROP2,PROP3))
+     | PROP IF PROP(ARG.Conditional(PROP2,PROP1))
+     | PROP IFF PROP(ARG.Biconditional(PROP1,PROP2))
+     | LPAREN PROP RPAREN(PROP)		 			

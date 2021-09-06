@@ -1,5 +1,6 @@
 CM.make("$/basis.cm");
 CM.make("$/ml-yacc-lib.cm");
+use "arg.sml";
 use "flasl2ast.yacc.sig";
 use "flasl2ast.yacc.sml";
 use "flasl2ast.lex.sml";

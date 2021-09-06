@@ -25,7 +25,7 @@ word = [a-zA-z];
 
 %%
 
-"\""[{word} | {ws}]*"\""     => (colNum := yypos - !(endOfLine);Token.ATOM(yytext,!rowNum,!colNum));
+"\""[{word} | {ws}]*"\""    => (colNum := yypos - !(endOfLine);Token.ATOM(yytext,!rowNum,!colNum));
 {newline}       	=> (rowNum := !rowNum + 1;endOfLine := yypos;lex());
 {ws}+           	=> (lex());
 "NOT"           	=> (colNum := yypos - !(endOfLine);Token.NOT(!rowNum,!colNum));
