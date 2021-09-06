@@ -21,17 +21,17 @@ structure Token = Tokens
  
 ws = [\ \t ];
 newline = [\r \n \r\n];
-word = [a-zA-z];
+word = [a-z];
 
 %%
 
-"\""[{word} | {ws}]*"\""    => (colNum := yypos - !(endOfLine);Token.ATOM(yytext,!rowNum,!colNum));
+{word}*   => (colNum := yypos - !(endOfLine);print(yytext^" ");Token.ATOM(yytext,!rowNum,!colNum));
 {newline}       	=> (rowNum := !rowNum + 1;endOfLine := yypos;lex());
 {ws}+           	=> (lex());
 "NOT"           	=> (colNum := yypos - !(endOfLine);Token.NOT(!rowNum,!colNum));
 "AND"           	=> (colNum := yypos - !(endOfLine);Token.AND(!rowNum,!colNum));
 "OR"            	=> (colNum := yypos - !(endOfLine);Token.OR(!rowNum,!colNum));
-"IF"            	=> (colNum := yypos - !(endOfLine);Token.IF(!rowNum,!colNum));
+"IF"            	=> (colNum := yypos - !(endOfLine);print(yytext^" ");Token.IF(!rowNum,!colNum));
 "THEN"          	=> (colNum := yypos - !(endOfLine);Token.THEN(!rowNum,!colNum));
 "ELSE"          	=> (colNum := yypos - !(endOfLine);Token.ELSE(!rowNum,!colNum));
 "IFF"               => (colNum := yypos - !(endOfLine);Token.IFF(!rowNum,!colNum));

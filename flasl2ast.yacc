@@ -13,7 +13,6 @@
 
 
 %right IFF
-%nonassoc ELSE
 %right THEN
 %left AND OR IF
 %right NOT
