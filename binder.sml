@@ -15,9 +15,19 @@ in
     lexer
 end
 
-fun runLexer lexer = 
+fun invokeLexer lexer = 
 let
     fun print_error(s,rowNum,colNum) = TextIO.output(TextIO.stdOut, "Error at "^(Int.toString rowNum)^" "^(Int.toString colNum)^"\n")
 in
     flasl2astParser.parse(0,lexer,print_error,())
+end
+
+fun invokeParser lexer =
+let
+    val dummyEOF = flasl2astLrVals.Tokens.EOF(0,0)
+    val (result,lexer) = invokeLexer lexer
+    val (nextToken,lexer) = flasl2astParser.Stream.get lexer
+in
+    if flasl2astParser.sameToken(nextToken,dummyEOF) then result
+    else ((TextIO.output(TextIO.stdOut, "Warning: Unconsumed input \n"));result)
 end
