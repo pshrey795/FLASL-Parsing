@@ -46,3 +46,11 @@ let
 in
     (TextIO.output(outstream,"val myAST = "^outputString);TextIO.closeOut outstream)
 end
+
+fun convertast2flasl arg outputFile =
+let 
+    val outstream = TextIO.openOut outputFile
+    val outputString = astToString(arg)
+in
+    (TextIO.output(outstream,outputString);TextIO.closeOut outstream)
+end

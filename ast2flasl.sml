@@ -17,6 +17,6 @@ fun convertList([],s) = s
 | convertList(p::proplist,s) = convertList(proplist,s^convert(p)^". ")
 
 fun astToString(argument) = 
-case argument of HENCE(proplist,prop) => convertList(proplist,"")^"THEREFORE "^convert(prop)
+case argument of HENCE(proplist,prop) => convertList(proplist,"")^"THEREFORE "^convert(prop)^"."
 
 end
