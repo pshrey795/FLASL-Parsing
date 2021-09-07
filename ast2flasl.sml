@@ -1,23 +1,11 @@
 structure ast2flasl =
 struct 
 
-exception Atom_exception
-
-datatype Prop = ATOM of string
-                | NOT of Prop
-                | AND of Prop * Prop
-                | OR of Prop * Prop
-                | COND of Prop * Prop
-                | BIC of Prop * Prop
-                | ITE of Prop * Prop * Prop
-
-datatype Argument = HENCE of Prop list * Prop
-
-fun addHyp(p:Prop, pl:Prop list) = p::pl
+open AST
 
 fun convert(prop) = 
 case prop of
-ATOM(atom)          => atom
+ATOM(atom)          => "\""^atom^"\""
 | NOT(p)            => "NOT "^convert(p)
 | AND(p1,p2)        => convert(p1)^" AND "^convert(p2)
 | OR(p1,p2)         => convert(p1)^" OR "^convert(p2)

@@ -4,6 +4,10 @@ structure flasl2astParser =	Join(structure LrParser = LrParser
                     structure ParserData = flasl2astLrVals.ParserData
      	       		structure Lex = flasl2astLex)
 
+open AST
+open flasl2ast
+open ast2flasl
+
 fun fileToLexer fileName =
 let
     val instream = TextIO.openIn fileName
@@ -22,7 +26,7 @@ in
     flasl2astParser.parse(0,lexer,print_error,())
 end
 
-fun invokeParser lexer =
+fun invokeParser(lexer) =
 let
     val dummyEOF = flasl2astLrVals.Tokens.EOF(0,0)
     val (result,lexer) = invokeLexer lexer
@@ -30,4 +34,15 @@ let
 in
     if flasl2astParser.sameToken(nextToken,dummyEOF) then result
     else ((TextIO.output(TextIO.stdOut, "Warning: Unconsumed input \n"));result)
+end
+
+val runParser = invokeParser o fileToLexer
+
+fun convertflasl2ast inputFile outputFile =
+let
+    val ast = runParser inputFile
+    val outputString = printArgument ast
+    val outstream = TextIO.openOut outputFile 
+in
+    (TextIO.output(outstream,"val myAST = "^outputString);TextIO.closeOut outstream)
 end

@@ -1,0 +1,1 @@
+val myAST = AST.HENCE([AST.COND(AST.ATOM("a"),AST.ATOM("b"))],AST.ATOM("c"))
