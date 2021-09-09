@@ -21,7 +21,7 @@ end
 
 fun invokeLexer lexer = 
 let
-    fun print_error(s,rowNum,colNum) = TextIO.output(TextIO.stdOut, "Error at "^(Int.toString rowNum)^" "^(Int.toString colNum)^"\n")
+    fun print_error(s,rowNum,colNum) = TextIO.output(TextIO.stdOut, "ParseError:"^(Int.toString rowNum)^":"^(Int.toString colNum)^"\n")
 in
     flasl2astParser.parse(0,lexer,print_error,())
 end

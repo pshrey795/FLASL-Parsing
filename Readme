@@ -1,0 +1,26 @@
+This submission consists of the following files:
+
+1) flasl2ast.lex => ML-Lex specification for the scanning of tokens
+2) flasl2ast.yacc => ML-Yacc specification for the parsing of tokens
+3) AST.sml => AST specification for the given language i.e. FLASL
+4) flasl2ast.sml => SML file to convert FLASL text to the corresponding Abstract Syntax Tree of Argument type
+5) ast2flasl.sml => SML file which takes an AST of argument type to obtain a FLASL text file
+6) binder.sml => Glue Code to link all the above files
+7) loader.sml => To load all the above files and dependencies
+8) Makefile => To build and run all the required files
+
+
+--How to run the files?
+
+1) All the files can be built by using the Makefile by typing `make all` in the command line. 
+2) This will open the SML interactive environment. 
+3) To run the parser, type in the console `runParser <input_flasl_file>`, and this will return an AST.
+
+For self-validation loop:
+
+1) Run the command `convertflasl2ast <input_flasl_file> <output_flasl_file>`. In this case, we will output the AST in the file arg.sml.
+2) Now type `use "arg.sml"` inside the console to import the argument variable, which in our case is named myAST.
+3) Now, to convert this AST back to FLASL, type `convertast2flasl myAST <output_flasl_file>`. In our case, the output file is arg-out.flasl
+4) Now, repeat the first three steps, but now take the input file in the first step as "arg-out.flasl" and the output file in the third step as "arg-out2.flasl"
+5) If both the output FLASL files are identical, then we have self-validated our program.
+6) Note that none of these output files can be compared with the input FLASL file since the input files may have syntax errors, or extra whitespaces, etc.

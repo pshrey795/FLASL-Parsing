@@ -1,3 +1,36 @@
+(* 
+
+EBNF for Formal Language for Arguments in Sentential Logic. This EBNF covers the associativity and precedence rules 
+
+Argument            ::= Hypothesis THEREFORE Proposition TERM .
+Hypothesis          ::= epsilon | Proposition TERM Hypothesis .
+Proposition         ::= Prop_ITE IFF Proposition | Prop_ITE .
+Prop_ITE            ::= IF Prop_ITE THEN Prop_ITE ELSE Prop_ITE | Prop_IF . 
+Prop_IF             ::= Prop_IF IF Prop_OR | IF Prop_IF THEN Prop_IF | Prop_OR .
+Prop_OR             ::= Prop_AND OR Prop_OR | Prop_AND .
+Prop_AND            ::= Prop_NOT AND Prop_AND | Prop_NOT . 
+Prop_NOT            ::= NOT Prop_NOT | LPAREN Proposition RPAREN | Atom
+THEREFORE           ::= "THEREFORE" .
+TERM                ::= "." .
+IFF                 ::= "IFF" .
+IF                  ::= "IF" .
+THEN                ::= "THEN" .
+ELSE                ::= "ELSE" .
+OR                  ::= "NOT" .
+AND                 ::= "AND" .
+NOT                 ::= "NOT" .
+LPAREN              ::= "(" .
+RPAREN              ::= ")" .
+QUOTE               ::= """ .
+Atom                ::= QUOTE {Character} QUOTE . 
+LETTER              ::= "-" | "!" | [#-'] | [*-,] | [0-~] | Whitespace | Newline
+Whitespace          ::= " " | "\t" .
+Newline             ::= "\n" | "\r" | "\n\r" .
+
+*)
+
+
+
 open AST
 
 %%
