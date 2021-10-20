@@ -7,6 +7,7 @@ structure flasl2astParser =	Join(structure LrParser = LrParser
 open AST
 open flasl2ast
 open ast2flasl
+open tableau
 
 fun fileToLexer fileName =
 let
@@ -38,19 +39,29 @@ end
 
 val runParser = invokeParser o fileToLexer
 
-fun convertflasl2ast inputFile outputFile =
-let
-    val ast = runParser inputFile
-    val outputString = printArgument ast
-    val outstream = TextIO.openOut outputFile 
-in
-    (TextIO.output(outstream,"val myAST = "^outputString);TextIO.closeOut outstream)
-end
+fun convertflasl2ast inputFile = runParser inputFile
 
-fun convertast2flasl arg outputFile =
+fun convertast2flasl inputFile outputFile =
 let 
+    val arg = runParser inputFile
     val outstream = TextIO.openOut outputFile
     val outputString = astToString(arg)
+in
+    (TextIO.output(outstream,outputString);TextIO.closeOut outstream)
+end
+
+fun falsify([]) = ""
+| falsify(atom::atoms) = 
+case atom of 
+ATOM(a)         => a^" : True"^"\n"^falsify(atoms)
+| NOT(ATOM(a))  => a^" : False"^"\n"^falsify(atoms)
+
+fun check inputFile outputFile =
+let
+    val arg = runParser inputFile
+    val outstream = TextIO.openOut outputFile
+    val (truthValue,atoms) = checkValidity(arg)
+    val outputString = if truthValue then "Valid" else falsify(atoms)
 in
     (TextIO.output(outstream,outputString);TextIO.closeOut outstream)
 end
