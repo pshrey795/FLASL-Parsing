@@ -49,19 +49,3 @@ let
 in
     (TextIO.output(outstream,outputString);TextIO.closeOut outstream)
 end
-
-fun falsify([]) = ""
-| falsify(atom::atoms) = 
-case atom of 
-ATOM(a)         => a^" : True"^"\n"^falsify(atoms)
-| NOT(ATOM(a))  => a^" : False"^"\n"^falsify(atoms)
-
-fun check inputFile outputFile =
-let
-    val arg = runParser inputFile
-    val outstream = TextIO.openOut outputFile
-    val (truthValue,atoms) = checkValidity(arg)
-    val outputString = if truthValue then "Valid" else falsify(atoms)
-in
-    (TextIO.output(outstream,outputString);TextIO.closeOut outstream)
-end
